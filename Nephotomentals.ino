@@ -114,6 +114,14 @@
     btConnected = true;
     Serial.print("[BLE] Connected: ");
     Serial.println(connInfo.getAddress().toString().c_str());
+    if (gRespChar != nullptr) {
+      gRespChar->setValue("=== Nephotology ===");
+      gRespChar->notify();
+      gRespChar->setValue("PM2.5 LED Controller");
+      gRespChar->notify();
+      gRespChar->setValue("Type HELP for commands");
+      gRespChar->notify();
+    }
   }
 
   void onDisconnect(NimBLEServer* pServer, NimBLEConnInfo &connInfo, int reason) override {
