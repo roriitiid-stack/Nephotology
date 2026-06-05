@@ -12,6 +12,7 @@
   #include <stdarg.h>
   #include <stdio.h>
   #include <string.h>
+  #include <esp_wifi.h>
 
   #define SCREEN_WIDTH  128
   #define SCREEN_HEIGHT  64
@@ -85,6 +86,27 @@
   struct CmdMsg { char data[200]; };
   static bool systemPowerOn = true;
   static uint8_t gBrightness = DEFAULT_BRIGHT;
+
+  // ─────────────────────────────────────────────
+  // WiFi Promiscuous Mode — device / people counting
+  // ─────────────────────────────────────────────
+  #define PROMISC_MAX_MACS   128
+  #define PROMISC_WINDOW_MS  60000UL  // rolling 60-second window
+
+  struct SeenMac {
+    uint8_t  addr[6];
+    uint32_t lastMs;
+  };
+
+  static SeenMac           gSeenMacs[PROMISC_MAX_MACS];
+  static uint8_t           gSeenMacCount   = 0;
+  static SemaphoreHandle_t promiscMutex    = NULL;
+  static volatile bool     gPromiscEnabled = false;
+  static volatile uint16_t gDeviceCount    = 0;
+  static uint16_t          gPeopleMax      = 50;   // max expected devices for normalization
+  static uint8_t           gPromiscCh      = 1;
+  static uint32_t          gLastChHopMs    = 0;
+  static bool              gWifiInitialized = false;
   static uint8_t gMode = 1;
   static uint16_t gFrameDelayMs = 16;
   uint32_t gNowMs = 0;
@@ -108,6 +130,48 @@
   static void handleCommand(const std::string& s);
   static void respond(const char* msg);
   static void respondf(const char* fmt, ...);
+
+  // Runs in WiFi task context — keep fast, use non-blocking mutex take.
+  static void wifiSniffCallback(void* buf, wifi_promiscuous_pkt_type_t type) {
+    if (!gPromiscEnabled || type != WIFI_PKT_MGMT) return;
+
+    const wifi_promiscuous_pkt_t* pkt = (const wifi_promiscuous_pkt_t*)buf;
+    if (pkt->rx_ctrl.sig_len < 24) return;
+
+    // 802.11 frame control: type bits[3:2], subtype bits[7:4]
+    const uint8_t* payload = pkt->payload;
+    uint8_t ftype   = (payload[0] >> 2) & 0x03;
+    uint8_t subtype = (payload[0] >> 4) & 0x0F;
+    if (ftype != 0 || subtype != 4) return;  // management probe request only
+
+    const uint8_t* srcMac = payload + 10;  // SA field in 802.11 header
+    uint32_t now = millis();
+
+    if (xSemaphoreTake(promiscMutex, 0) != pdTRUE) return;
+
+    for (uint8_t i = 0; i < gSeenMacCount; i++) {
+      if (memcmp(gSeenMacs[i].addr, srcMac, 6) == 0) {
+        gSeenMacs[i].lastMs = now;
+        xSemaphoreGive(promiscMutex);
+        return;
+      }
+    }
+
+    if (gSeenMacCount < PROMISC_MAX_MACS) {
+      memcpy(gSeenMacs[gSeenMacCount].addr, srcMac, 6);
+      gSeenMacs[gSeenMacCount].lastMs = now;
+      gSeenMacCount++;
+    } else {
+      uint8_t oldest = 0;
+      for (uint8_t i = 1; i < PROMISC_MAX_MACS; i++) {
+        if (gSeenMacs[i].lastMs < gSeenMacs[oldest].lastMs) oldest = i;
+      }
+      memcpy(gSeenMacs[oldest].addr, srcMac, 6);
+      gSeenMacs[oldest].lastMs = now;
+    }
+
+    xSemaphoreGive(promiscMutex);
+  }
 
   class ServerCallbacks : public NimBLEServerCallbacks {
   void onConnect(NimBLEServer* pServer, NimBLEConnInfo &connInfo) override {
@@ -273,6 +337,15 @@
     display.print("A:");
     display.print(EMA_ALPHA, 2);
 
+    // Device count (promiscuous mode)
+    if (gPromiscEnabled) {
+      display.setCursor(0, 56);
+      display.print("D:");
+      display.print((uint16_t)gDeviceCount);
+      display.print("/");
+      display.print(gPeopleMax);
+    }
+
     display.display();
   }
 
@@ -352,16 +425,87 @@
       }
     }
   }
+  static void updateDeviceCount() {
+    if (!gPromiscEnabled) return;
+    if (xSemaphoreTake(promiscMutex, pdMS_TO_TICKS(5)) != pdTRUE) return;
+
+    uint32_t cutoff = millis() - PROMISC_WINDOW_MS;
+    uint16_t count = 0;
+    for (uint8_t i = 0; i < gSeenMacCount; i++) {
+      if (gSeenMacs[i].lastMs > cutoff) count++;
+    }
+    gDeviceCount = count;
+
+    xSemaphoreGive(promiscMutex);
+  }
+
+  static void enablePromiscuous() {
+    if (gPromiscEnabled) return;
+
+    if (!gWifiInitialized) {
+      wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+      if (esp_wifi_init(&cfg) != ESP_OK) {
+        Serial.println("[PROMISC] WiFi init failed");
+        return;
+      }
+      gWifiInitialized = true;
+    }
+
+    esp_wifi_set_mode(WIFI_MODE_NULL);
+    esp_wifi_start();
+
+    wifi_promiscuous_filter_t filter = { .filter_mask = WIFI_PROMIS_FILTER_MASK_MGMT };
+    esp_wifi_set_promiscuous_filter(&filter);
+    esp_wifi_set_promiscuous_rx_cb(wifiSniffCallback);
+    esp_wifi_set_promiscuous(true);
+    esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
+
+    gPromiscCh = 1;
+    gLastChHopMs = millis();
+
+    if (xSemaphoreTake(promiscMutex, pdMS_TO_TICKS(10)) == pdTRUE) {
+      gSeenMacCount = 0;
+      gDeviceCount  = 0;
+      xSemaphoreGive(promiscMutex);
+    }
+
+    gPromiscEnabled = true;
+    Serial.println("[PROMISC] Enabled — MODE 8 driven by device count");
+  }
+
+  static void disablePromiscuous() {
+    if (!gPromiscEnabled) return;
+
+    gPromiscEnabled = false;
+    esp_wifi_set_promiscuous(false);
+
+    if (gWifiInitialized) {
+      esp_wifi_stop();
+      esp_wifi_deinit();
+      gWifiInitialized = false;
+    }
+
+    gDeviceCount = 0;
+    Serial.println("[PROMISC] Disabled");
+  }
+
   // Network/Sensor task on Core 0
   void networkTask(void *parameter) {
     for (;;) {
-      // Poll sensor data
       pollPMS();
 
-      // Add BLE/WiFi/network routines here as needed
-      // Currently just periodic sensor polling
+      if (gPromiscEnabled) {
+        // Hop channels every 500 ms to capture devices across all 13 channels
+        uint32_t now = millis();
+        if (now - gLastChHopMs >= 500) {
+          gLastChHopMs = now;
+          gPromiscCh = (gPromiscCh % 13) + 1;
+          esp_wifi_set_channel(gPromiscCh, WIFI_SECOND_CHAN_NONE);
+        }
+        updateDeviceCount();
+      }
 
-      vTaskDelay(pdMS_TO_TICKS(100)); // Poll every 100ms
+      vTaskDelay(pdMS_TO_TICKS(100));
     }
   }
 
@@ -604,6 +748,46 @@ static void handleCommand(const std::string& s) {
     return;
   }
 
+  // ========== PROMISCUOUS MODE ==========
+  if (cmd == "PROMISC" || cmd == "PROMISCUOUS") {
+    if (gPromiscEnabled)
+      respondf("Promisc: ON  ch=%u  devices=%u  max=%u", gPromiscCh, (uint16_t)gDeviceCount, gPeopleMax);
+    else
+      respond("Promisc: OFF");
+    return;
+  }
+
+  if (cmd.startsWith("PROMISC ") || cmd.startsWith("PROMISCUOUS ")) {
+    String arg = cmd.substring(cmd.indexOf(' ') + 1);
+    arg.trim();
+    if (arg == "ON") {
+      enablePromiscuous();
+      respond("OK Promisc ON - MODE 8 uses device count");
+    } else if (arg == "OFF") {
+      disablePromiscuous();
+      respond("OK Promisc OFF");
+    } else {
+      respond("Usage: PROMISC ON | PROMISC OFF");
+    }
+    return;
+  }
+
+  if (cmd.startsWith("PMAX")) {
+    int n = extractNumber(cmd, 4);
+    n = constrain(n, 1, 999);
+    gPeopleMax = (uint16_t)n;
+    respondf("OK PeopleMax %u", gPeopleMax);
+    return;
+  }
+
+  if (cmd == "DEVICES") {
+    if (gPromiscEnabled)
+      respondf("Devices: %u / %u  ch=%u", (uint16_t)gDeviceCount, gPeopleMax, gPromiscCh);
+    else
+      respond("Promisc OFF - run PROMISC ON first");
+    return;
+  }
+
   // ========== FPS / DELAY ==========
   if (cmd == "FPS") {
     uint16_t fps = (gFrameDelayMs > 0) ? (uint16_t)(1000 / gFrameDelayMs) : 0;
@@ -712,6 +896,12 @@ static void handleCommand(const std::string& s) {
     respondf("PM min:     %.1f",   PM25_MIN);
     respondf("Delay:      %u ms",  gFrameDelayMs);
     if (haveReading) respondf("PM2.5:      %.1f", pm25_ema);
+    if (gPromiscEnabled) {
+      respondf("Promisc:    ON ch=%u", gPromiscCh);
+      respondf("Devices:    %u / %u", (uint16_t)gDeviceCount, gPeopleMax);
+    } else {
+      respond("Promisc:    OFF");
+    }
     respond("--------------------------");
     return;
   }
@@ -730,6 +920,9 @@ static void handleCommand(const std::string& s) {
     respond("FPS / DELAY:     FPS 60 | DELAY 16");
     respond("LOCATOR:         FIND DISC 24 | LOC STRIP 120");
     respond("                 FIND CLOUD 25 | FIND OFF");
+    respond("PROMISC ON/OFF:  WiFi device scan (drives MODE 8)");
+    respond("PMAX 1-999:      PMAX 30 (max expected devices)");
+    respond("DEVICES:         Show current device count");
     respond("INFO:            STATUS / ?    HELP / H");
     respond("==========================");
     return;
@@ -755,7 +948,13 @@ static void handleCommand(const std::string& s) {
     pmMutex = xSemaphoreCreateMutex();
     if (pmMutex == NULL) {
       Serial.println("ERROR: Could not create pmMutex");
-      while (1); // Halt if mutex creation fails
+      while (1);
+    }
+
+    promiscMutex = xSemaphoreCreateMutex();
+    if (promiscMutex == NULL) {
+      Serial.println("ERROR: Could not create promiscMutex");
+      while (1);
     }
 
     if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
@@ -834,8 +1033,15 @@ Serial.println(NimBLEDevice::getAddress().toString().c_str());
     // Safely read PM2.5 value from Core 0 task
     float pmValue = 0.0f;
     if(xSemaphoreTake(pmMutex, pdMS_TO_TICKS(1)) == pdTRUE) {
-      pmValue = pm25_ema; // copy shared EMA from Core 0
+      pmValue = pm25_ema;
       xSemaphoreGive(pmMutex);
+    }
+
+    // When promiscuous is on and MODE 8 (effectPeople) is active,
+    // replace the PM-derived signal with a device-count-derived one.
+    if (gPromiscEnabled && gMode == 8) {
+      float devRatio = fclamp((float)(uint16_t)gDeviceCount / (float)gPeopleMax, 0.0f, 1.0f);
+      pmValue = PM25_MIN + devRatio * (PM25_MAX - PM25_MIN);
     }
 
     if(!systemPowerOn){
