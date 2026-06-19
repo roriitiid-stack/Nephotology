@@ -1,0 +1,143 @@
+name: AVR8JS Test Template (fbuild)
+
+# Reusable template: build + run an Arduino sketch in the AVR8JS JavaScript
+# emulator via `fbuild test-emu --emulator avr8js`.
+#
+# Migration note: this template used to orchestrate a Docker container
+# (niteris/fastled-avr8js) with hand-rolled timeout + regex-matching bash.
+# fbuild 2.1.16+ ships `test-emu` with native --timeout / --halt-on-success /
+# --halt-on-error / --expect, which replaces the whole pipeline. See
+# FastLED/fbuild#86 for the avr8js auto-install robustness fix this relies on.
+
+on:
+  workflow_call:
+    inputs:
+      platform:
+        description: 'AVR platform to test (uno, leonardo, etc.)'
+        required: true
+        type: string
+      platform_display:
+        description: 'Display name for the platform (e.g., Arduino Uno)'
+        required: true
+        type: string
+      sketch:
+        description: 'Arduino sketch/example to test (e.g., Test, Blink)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+  pull-requests: read
+
+jobs:
+  avr8js_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Pin python version
+        run: echo "3.11" > .python-version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "**/pyproject.toml"
+          version: "0.8.0"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install project dependencies (includes fbuild)
+        run: uv sync
+
+      - name: Set up Node.js
+        # fbuild's avr8js runner needs Node to run its bundled headless.mjs.
+        # Node auto-installs the avr8js npm package into ~/.fbuild/cache/.
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Belt-and-suspenders avr8js install
+        # Pre-populate the fbuild cache so even if the auto-install path has
+        # a regression (see FastLED/fbuild#86), the runner still finds avr8js.
+        run: |
+          mkdir -p ~/.fbuild/cache/avr8js-node
+          cd ~/.fbuild/cache/avr8js-node
+          npm init -y >/dev/null 2>&1 || true
+          npm install avr8js@0.21.0 --no-fund --no-audit
+          echo "avr8js cache populated:"
+          ls -la node_modules/avr8js | head -5
+
+      - name: "fbuild test-emu — build + emulate ${{ inputs.sketch }} on ${{ inputs.platform_display }}"
+        id: test_emu
+        # Two-step pattern: ci-compile.py stages the sketch into
+        # .build/pio/<env>/ (writes platformio.ini + fbuild firmware.hex).
+        # Then fbuild test-emu loads firmware into AVR8JS and streams
+        # serial output with timestamps.
+        #
+        # --halt-on-success "Test loop" ends the run as soon as loop() is
+        # reached; without it the emulator would run to the 30s timeout.
+        # --halt-on-error catches panics and avr-libc aborts early.
+        # --expect asserts setup() actually ran before we declared success.
+        # Output is tee'd into avr8js_output.log for artifact upload.
+        run: |
+          set -o pipefail
+          uv run ci/ci-compile.py ${{ inputs.platform }} \
+            --examples ${{ inputs.sketch }} \
+            --verbose
+          uv run fbuild test-emu \
+            --emulator avr8js \
+            --environment ${{ inputs.platform }} \
+            --timeout 30 \
+            --halt-on-success "Test loop" \
+            --halt-on-error "PANIC|ABORT|assert" \
+            --expect "Test setup starting" \
+            .build/pio/${{ inputs.platform }} 2>&1 | tee avr8js_output.log
+        shell: bash
+
+      - name: Display emulator output
+        if: always()
+        run: |
+          echo "=== ${{ inputs.platform_display }} AVR8JS Output (first 200 lines) ==="
+          if [ -f avr8js_output.log ]; then
+            head -200 avr8js_output.log
+            echo ""
+            echo "=== Stats ==="
+            echo "Lines: $(wc -l < avr8js_output.log)"
+            echo "Size:  $(stat -c%s avr8js_output.log) bytes"
+          else
+            echo "(no output log produced)"
+          fi
+
+      - name: Generate artifact name
+        id: artifact_name
+        if: always()
+        run: |
+          SKETCH_NAME="${{ inputs.sketch }}"
+          echo "sketch=${SKETCH_NAME////-}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Upload output log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.platform }}-avr8js-failure-${{ steps.artifact_name.outputs.sketch }}-${{ github.sha }}
+          path: avr8js_output.log
+          if-no-files-found: warn
+
+      - name: Upload output log on success
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.platform }}-avr8js-success-${{ steps.artifact_name.outputs.sketch }}-${{ github.sha }}
+          path: avr8js_output.log
+          if-no-files-found: warn

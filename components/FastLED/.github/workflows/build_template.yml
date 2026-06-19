@@ -1,0 +1,297 @@
+name: Build Template
+
+on:
+  workflow_call:
+    inputs:
+      args:
+        type: string
+        required: false
+        default: ""
+      platform:
+        type: string
+        required: false
+        default: ""
+      runs-on:
+        type: string
+        required: false
+        default: "ubuntu-latest"
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+  pull-requests: read
+
+jobs:
+  build:
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Pin python version
+        run: |
+          echo "3.11" >> .python-version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "**/pyproject.toml"
+          version: "0.8.0" # 0.8.8 has problems with deployment on linux.
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      # Extract board name (first positional in inputs.args) so per-board
+      # fbuild caches don't collide.
+      # All board builds use fbuild, so each board gets a warm toolchain
+      # and compile cache from previous runs.
+      - name: Extract board name from inputs.args
+        id: fbuild_board
+        shell: bash
+        env:
+          BUILD_ARGS: ${{ inputs.args }}
+        run: |
+          board="$(awk '{print $1}' <<< "$BUILD_ARGS")"
+          printf 'name=%s\n' "${board:-unknown}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up fbuild (install + cache)
+        uses: FastLED/fbuild/.github/actions/setup@main
+        with:
+          cache-key-extra: ${{ steps.fbuild_board.outputs.name }}-${{ hashFiles('platformio.ini', 'library.json', 'pyproject.toml', 'uv.lock') }}
+
+      - name: Install Platform
+        if: inputs.platform != ''
+        run: |
+          uv run pio pkg -g install ${{ inputs.platform }}
+
+      - name: PlatformIO Versions
+        run: |
+          uv run platformio --version
+
+      - name: Build FastLED examples with "./compile --no-interactive  ${{ inputs.args }}"
+        id: build_examples
+        run: |
+          set -o pipefail
+          ./compile --no-interactive --no-parallel --log-failures failures --max-failures 3  ${{ inputs.args }} | tee build.log
+        shell: bash
+
+      - name: Build summary and failure logs
+        if: failure()
+        run: |
+          SUMMARY_FILE="build-summary.txt"
+          {
+            echo "############################################"
+            echo "Last 100 lines of build.log (most recent output)"
+            echo "############################################"
+            tail -n 100 build.log 2>/dev/null || true
+
+            echo ""
+            echo "############################################"
+            echo "Failure logs (if any)"
+            echo "############################################"
+            fail_dir="failures"
+            if [ -d "$fail_dir" ] && ls "$fail_dir"/*.log >/dev/null 2>&1; then
+              for f in "$fail_dir"/*.log; do
+                echo "----------------------"
+                echo "$(basename "$f")"
+                echo "----------------------"
+                cat "$f"
+                echo ""
+              done
+              echo "BUILD FAILED: See failure logs above"
+            else
+              echo "ALL EXAMPLES SUCCESSFULLY COMPILED"
+            fi
+          } | tee "$SUMMARY_FILE"
+
+          # Exit with error if failures exist
+          fail_dir="failures"
+          if [ -d "$fail_dir" ] && ls "$fail_dir"/*.log >/dev/null 2>&1; then
+            exit 1
+          fi
+        shell: bash
+
+      - name: Find platformio.ini file and print it out
+        if: always()
+        continue-on-error: true
+        run: |
+          platformio_ini=$(find ./.build -type f -name platformio.ini | head -n 1)
+          if [ -f "$platformio_ini" ]; then
+            echo "Found platformio.ini at: $platformio_ini"
+            echo "############################################"
+            cat "$platformio_ini"
+            echo "############################################"
+          else
+            echo "platformio.ini not found"
+          fi
+
+      - name: Print out build_info files
+        if: always()
+        run: |
+          echo "============================================"
+          echo "Current directory: $(pwd)"
+          echo "============================================"
+          echo "Searching for build_info*.json files..."
+          echo "Running: find . -name 'build_info*.json'"
+          echo "============================================"
+          build_info_files=$(find . -name 'build_info*.json')
+
+          if [ -z "$build_info_files" ]; then
+            echo "ERROR: No build_info*.json files found"
+            echo "Directory contents of .build:"
+            ls -laR .build 2>/dev/null || echo ".build directory does not exist"
+          else
+            echo "Found build_info files:"
+            echo "$build_info_files"
+            echo "============================================"
+
+            # Print each file's contents
+            while IFS= read -r file; do
+              if [ -f "$file" ]; then
+                echo ""
+                echo "File: $file"
+                echo "--------------------------------------------"
+                cat "$file"
+                echo "============================================"
+              fi
+            done <<< "$build_info_files"
+          fi
+
+      - name: CPP Check
+        run: |
+          # take the input.args and parse out the first element, which will be the board name
+          # do this to input.args
+          python -c "print('${{ inputs.args }}'.split()[0])" > board.txt
+          cat board.txt | xargs -I {} uv run ci/ci-cppcheck.py {}
+        shell: bash
+
+      - name: Check Compiled size of last compiled example
+        continue-on-error: true
+        run: |
+          uv run ci/ci-check-compiled-size.py ${{ inputs.args }} --no-build
+
+      - name: Inspect Binary
+        if: always()
+        continue-on-error: true
+        run: |
+          echo "============================================"
+          echo "Binary Artifacts"
+          echo "============================================"
+
+          # Find build directory
+          if [ -d ".build/pio" ]; then
+            BUILD_DIR=".build/pio"
+          else
+            BUILD_DIR=".build"
+          fi
+
+          # List all firmware files with paths and sizes
+          echo ""
+          find "$BUILD_DIR" \( -name "*.bin" -o -name "*.hex" -o -name "*.elf" -o -name "*.uf2" \) -type f 2>/dev/null | while read -r file; do
+            size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "unknown")
+            if [ "$size" != "unknown" ]; then
+              size_kb=$(echo "scale=2; $size / 1024" | bc)
+              echo "📦 $file"
+              echo "   Size: $size bytes (${size_kb} KB)"
+            else
+              echo "📦 $file"
+            fi
+          done
+
+          # List partition files if they exist
+          echo ""
+          find "$BUILD_DIR" -name "partitions.csv" -type f 2>/dev/null | while read -r file; do
+            echo "📋 $file"
+            echo "   $(head -1 "$file" 2>/dev/null || echo 'Partition table')"
+          done
+
+          echo ""
+          echo "============================================"
+
+      - name: Build Blink.ino for library info
+        continue-on-error: true
+        run: |
+          # Strip --examples and positional examples from args, then add --examples Blink
+          ARGS="${{ inputs.args }}"
+
+          # First remove any --examples flag and its value
+          ARGS=$(echo "$ARGS" | sed -E 's/--examples\s+[^[:space:]]+//g')
+
+          # Extract board name (first word)
+          BOARD=$(echo "$ARGS" | awk '{print $1}')
+
+          # Extract everything after board name
+          REST=$(echo "$ARGS" | sed -E 's/^[^[:space:]]+\s*//')
+
+          # Remove positional arguments (words not starting with --)
+          # Keep only flags and their values
+          CLEAN_ARGS=""
+          prev_was_flag=0
+          for word in $REST; do
+            if [[ $word == --* ]]; then
+              CLEAN_ARGS="$CLEAN_ARGS $word"
+              prev_was_flag=1
+            elif [[ $prev_was_flag == 1 ]]; then
+              # This is a flag value
+              CLEAN_ARGS="$CLEAN_ARGS $word"
+              prev_was_flag=0
+            fi
+            # Otherwise skip (it's a positional arg like "all")
+          done
+
+          uv run ci/ci-compile.py $BOARD$CLEAN_ARGS --examples Blink
+        shell: bash
+
+      - name: Symbol Analysis
+        if: always()
+        continue-on-error: true
+        run: |
+          # Parse the board name from args (first element)
+          python -c "print('${{ inputs.args }}'.split()[0])" > board.txt
+          cat board.txt | xargs -I {} uv run ci/symbol_analysis_runner.py --board {} --example Blink --skip-on-failure
+        shell: bash
+
+      - name: Optimization Report
+        if: always()
+        continue-on-error: true
+        run: |
+          uv run ci/optimization_report.py --first
+
+      - name: Generate timestamp and random hex
+        if: always()
+        id: generate_id
+        run: |
+          echo "timestamp=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_OUTPUT
+          echo "random_hex=$(openssl rand -hex 3)" >> $GITHUB_OUTPUT
+
+      - name: Upload build artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ steps.generate_id.outputs.timestamp }}-${{ github.sha }}-${{ steps.generate_id.outputs.random_hex }}
+          path: .build/
+          include-hidden-files: true
+
+      - name: Upload build log
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ steps.generate_id.outputs.timestamp }}-${{ github.sha }}-${{ steps.generate_id.outputs.random_hex }}
+          path: build.log
+
+      - name: Upload build summary
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-summary-${{ steps.generate_id.outputs.timestamp }}-${{ github.sha }}-${{ steps.generate_id.outputs.random_hex }}
+          path: build-summary.txt
+          if-no-files-found: ignore
+
+      - name: Check build status
+        if: failure()
+        run: exit 1

@@ -1,0 +1,1491 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (24) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (25) boot: compile time Jun 14 2026 09:45:32
+I (25) boot: Multicore bootloader
+I (25) boot: chip revision: v0.2
+I (28) boot: efuse block revision: v1.3
+I (32) boot.esp32s3: Boot SPI Speed : 80MHz
+I (36) boot.esp32s3: SPI Mode       : DIO
+I (39) boot.esp32s3: SPI Flash Size : 8MB
+I (43) boot: Enabling RNG early entropy source...
+I (48) boot: Partition Table:
+I (50) boot: ## Label            Usage          Type ST Offset   Length
+I (57) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (63) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (70) boot:  2 factory          factory app      00 00 00010000 00300000
+I (76) boot: End of partition table
+I (79) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (177) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (180) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (371) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (374) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (401) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (413) boot: Loaded app from partition at offset 0x10000
+I (413) boot: Disabling RNG early entropy source...
+I (424) cpu_start: Multicore app
+I (433) cpu_start: Pro cpu start user code
+I (433) cpu_start: cpu freq: 160000000 Hz
+I (433) app_init: Application information:
+I (433) app_init: Project name:     Nephotology
+I (437) app_init: App version:      1
+I (441) app_init: Compile time:     Jun 14 2026 10:01:52
+I (446) app_init: ELF file SHA256:  39c155d27...
+I (450) app_init: ESP-IDF:          v5.5.1-dirty
+I (454) efuse_init: Min chip rev:     v0.0
+I (458) efuse_init: Max chip rev:     v0.99 
+I (462) efuse_init: Chip rev:         v0.2
+I (466) heap_init: Initializing. RAM available for dynamic allocation:
+I (472) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (477) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (483) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (488) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (494) spi_flash: detected chip: generic
+I (497) spi_flash: flash io: dio
+I (501) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (506) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (513) coexist: coex firmware version: b0bcc39
+I (543) coexist: coexist rom version e7ae62f
+I (544) main_task: Started on CPU0
+I (545) main_task: Calling app_main()
+I (554) main_task: Returned from app_main()
+I (754) I (756) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (760) BLE_INIT: BT controller compile version [2edb0b0]
+I (765) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060b30  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060b20  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060b30  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060b20  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BLE_INIT: BT controller compile version [2edb0b0]
+I (771) BLE_INIT: Using main XTAL as clock source
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4204edbd  PS      : 0x00060130  A0      : 0x820609dc  A1      : 0x3fcebf20  
+A2      : 0x00000008  A3      : 0x00000000  A4      : 0x00060120  A5      : 0x0000000c  
+A6      : 0x00000002  A7      : 0x3fcebe10  A8      : 0x0000001b  A9      : 0x00000004  
+A10     : 0x00000032  A11     : 0x00000000  A12     : 0xfffffff8  A13     : 0x3c11d4f4  
+A14     : 0x00000022  A15     : 0x3fcebdd0  SAR     : 0x0000000e  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000008  LBEG    : 0x400556d5  LEND    : 0x400556e5  LCOUNT  : 0xfffffffd  
+
+
+Backtrace: 0x4204edba:0x3fcebf20 0x420609d9:0x3fcebf40 0x42061cd7:0x3fcebf60 0x4204f4a7:0x3fcebfb0 0x4205bf63:0x3fcebfe0 0x4203dcfd:0x3fcec050 0x42027579:0x3fcec070 0x4202788f:0x3fcec120 0x40383bc1:0x3fcec140
+
+
+
+
+ELF file SHA256: 39c155d27
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4037f852
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x158c
+load:0x403c8700,len:0xd24
+load:0x403cb700,len:0x2f34
+entry 0x403c8924
+I (29) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader
+I (29) boot: compile time Jun 14 2026 09:45:32
+I (29) boot: Multicore bootloader
+I (30) boot: chip revision: v0.2
+I (33) boot: efuse block revision: v1.3
+I (36) boot.esp32s3: Boot SPI Speed : 80MHz
+I (40) boot.esp32s3: SPI Mode       : DIO
+I (44) boot.esp32s3: SPI Flash Size : 8MB
+I (48) boot: Enabling RNG early entropy source...
+I (52) boot: Partition Table:
+I (55) boot: ## Label            Usage          Type ST Offset   Length
+I (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (67) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (74) boot:  2 factory          factory app      00 00 00010000 00300000
+I (81) boot: End of partition table
+I (84) esp_image: segment 0: paddr=00010020 vaddr=3c110020 size=7d874h (514164) map
+I (182) esp_image: segment 1: paddr=0008d89c vaddr=3fca2000 size=0277ch ( 10108) load
+I (185) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=106c54h (1076308) map
+I (377) esp_image: segment 3: paddr=00196c7c vaddr=3fca477c size=02dc0h ( 11712) load
+I (379) esp_image: segment 4: paddr=00199a44 vaddr=40374000 size=1df84h (122756) load
+I (407) esp_image: segment 5: paddr=001b79d0 vaddr=50000000 size=00020h (    32) load
+I (419) boot: Loaded app from partition at offset 0x10000
+I (419) boot: Disabling RNG early entropy source...
+I (429) cpu_start: Multicore app
+I (439) cpu_start: Pro cpu start user code
+I (439) cpu_start: cpu freq: 160000000 Hz
+I (439) app_init: Application information:
+I (439) app_init: Project name:     Nephotology
+I (443) app_init: App version:      1
+I (446) app_init: Compile time:     Jun 14 2026 10:01:52
+I (451) app_init: ELF file SHA256:  39c155d27...
+I (456) app_init: ESP-IDF:          v5.5.1-dirty
+I (460) efuse_init: Min chip rev:     v0.0
+I (464) efuse_init: Max chip rev:     v0.99 
+I (468) efuse_init: Chip rev:         v0.2
+I (472) heap_init: Initializing. RAM available for dynamic allocation:
+I (478) heap_init: At 3FCB6830 len 00032EE0 (203 KiB): RAM
+I (483) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (488) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (493) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (500) spi_flash: detected chip: generic
+I (502) spi_flash: flash io: dio
+I (507) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (512) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (518) coexist: coex firmware version: b0bcc39
+I (549) coexist: coexist rom version e7ae62f
+I (550) main_task: Started on CPU0
+I (551) main_task: Calling app_main()
+I (560) main_task: Returned from app_main()
+I (760) I (762) uart: queue free spaces: 20
+btdm: bss start 0x3fcef180, len 36
+btdm: data start 0x3fcef174, data start rom 0x40057350, len 12
+MAGIC fadebead VERSION 0001000a
+I (766) BL

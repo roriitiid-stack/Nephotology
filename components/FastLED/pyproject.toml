@@ -1,0 +1,217 @@
+[project]
+name = "ci"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # Pin to an fbuild release that includes both Teensy framework library
+    # resolution and the Teensy-compatible GCC 11 toolchain fix needed for
+    # teensy40/teensy41.
+    "fbuild==2.2.3",
+    "platformio>=6.1.19,<6.2",
+    "python-dateutil",
+    "ruff",
+    "pyright>=1.1.373",
+    "types-python-dateutil",
+    "clang-format",
+    "pip",
+    "pytest",
+    "pytest-xdist",
+    "fpvgcc",
+    "uv",
+    "clang-tool-chain>=1.5.2",
+    "zccache>=1.4.0",
+    "ninja",
+    "meson>=1.11.0",
+    "download",
+    "playwright",
+    "httpx",
+    "psutil",
+    "toml>=0.10.2",
+    "typeguard>=4.4.4",
+    "mcp>=1.12.2",
+    "compiledb>=0.10.7",
+    "pathspec>=0.12.1",
+    "rich>=14.1.0",
+    "textual>=1.0.0",
+    "emoji>=2.14.1",
+    "pydantic[email]>=2.0.0",
+    "dirsync>=2.2.6",
+    "esptool>=5.0.2",
+    "docker>=7.0.0",
+    "pillow>=11.3.0",
+    "ffmpeg-python>=0.2.0",
+    "static-ffmpeg>=2.7",
+    "fastled>=2.0.5",
+    "running-process>=3.0.9",
+    "nodejs-wheel>=22.0.0",
+    "daemoniker>=0.2.3",
+    "colorama>=0.4.6",
+    "ty>=0.0.15",
+    "bleak>=0.22.3",
+]
+
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+[tool.hatch.build.targets.wheel]
+
+[tool.hatch.build]
+packages = ["ci"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.ruff]
+exclude = ["ci/tmp", "ci/wasm", "scripts", "native", "**/.fbuild", "**/.pio"]
+
+[tool.ruff.lint]
+# Enable import sorting (replaces isort)
+# Enable PEP 585 annotations and PEP 604 unions (modern type hints)
+select = [
+    "I",      # isort - import sorting
+    "UP006",  # Use PEP 585 annotation (list[T] instead of List[T])
+    "UP007",  # Use PEP 604 union syntax (X | Y instead of Union[X, Y], T | None instead of Optional[T])
+]
+# Register custom checker codes so ruff accepts # noqa: DCT001 etc.
+external = ["DCT001", "DCT002"]
+
+[tool.ruff.lint.isort]
+# Configure import sorting to match isort's black profile
+force-single-line = false
+force-sort-within-sections = false
+lines-after-imports = 2
+
+[tool.ruff.format]
+# Enable formatting (replaces black)
+# Use black-compatible settings
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.isort]
+# Configure isort to use black-compatible formatting
+profile = "black"
+skip_glob = ["ci/tmp/*", "ci/wasm/*", "scripts/*", "native/*", "**/.fbuild/*", "**/.pio/*"]
+
+[tool.pyright]
+include = ["ci", "ci/compiler"]
+exclude = [
+    "ci/tmp/",
+    "ci/wasm/",
+    "ci/native/",
+    "native/",
+    "**/__pycache__",
+    "**/.pytest_cache",
+    "**/.ruff_cache",
+    "**/node_modules",
+    "**/.git",
+    "**/.venv",
+    "**/.build",
+    "**/.pio",
+    "**/.pio_cache",
+    "**/build",
+    "**/dist",
+    "**/*.egg-info",
+    "tmp.py",
+    "ci/compiler/packages.py",
+    "ci/tests/**",
+    "ci/util/test_*.py",
+]
+
+# Type checking configuration
+typeCheckingMode = "strict"
+pythonVersion = "3.11"
+pythonPlatform = "All"
+useLibraryCodeForTypes = true
+analyzeUnannotatedFunctions = true
+strictParameterNoneValue = true
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+
+# Report settings
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportUnusedImport = false
+reportUnusedClass = false
+reportUnusedFunction = true
+reportUnusedVariable = false
+reportDuplicateImport = true
+reportWildcardImportFromLibrary = true
+reportOptionalSubscript = false
+reportOptionalMemberAccess = false
+reportOptionalCall = false
+reportOptionalIterable = false
+reportOptionalContextManager = false
+reportOptionalOperand = false
+reportGeneralTypeIssues = true
+reportPropertyTypeMismatch = true
+reportFunctionMemberAccess = true
+reportPrivateUsage = false
+reportConstantRedefinition = false
+reportIncompatibleMethodOverride = true
+reportIncompatibleVariableOverride = true
+reportInconsistentConstructor = true
+reportOverlappingOverload = true
+reportMissingSuperCall = false
+reportUninitializedInstanceVariable = false
+reportInvalidStringEscapeSequence = true
+reportUnknownParameterType = "error"
+reportUnknownArgumentType = "error" 
+reportUnknownLambdaType = "error"
+reportUnknownVariableType = "error"
+reportUnknownMemberType = "error"
+reportMissingParameterType = "error"
+reportMissingTypeArgument = "error"
+reportReturnType = "error"
+reportUntypedFunctionDecorator = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedBaseClass = "error"
+reportUntypedNamedTuple = "error"
+reportInvalidTypeVarUse = true
+reportCallInDefaultInitializer = false
+reportUnnecessaryIsInstance = false
+reportUnnecessaryCast = false
+reportUnnecessaryComparison = false
+reportUnnecessaryContains = false
+reportAssertAlwaysTrue = false
+reportSelfClsParameterName = true
+reportImplicitStringConcatenation = false
+reportUndefinedVariable = true
+reportUnboundVariable = true
+reportInvalidStubStatement = true
+reportIncompleteStub = true
+reportUnsupportedDunderAll = true
+reportUnusedCallResult = false
+reportUnusedCoroutine = true
+reportUnusedExpression = false
+reportUnnecessaryTypeIgnoreComment = false
+reportMatchNotExhaustive = true
+
+# Display settings
+verboseOutput = false
+autoImportCompletions = false
+indexing = false
+functionSignatureDisplay = "compact"
+
+[tool.pytest.ini_options]
+markers = [
+    "full: marks tests as requiring the full test suite (deselected during quick Python-only runs)",
+    "serial: marks tests as requiring serial execution (no parallel execution)",
+    "slow: marks tests as slow (can be skipped with -m 'not slow' for faster test runs)",
+]
+
+[[tool.pyright.executionEnvironments]]
+root = "."
+pythonVersion = "3.11"
+pythonPlatform = "All"
+
+[[tool.pyright.executionEnvironments]]
+root = "ci/tests"
+pythonVersion = "3.11"
+pythonPlatform = "All"
+# Enforce return type annotations even for test methods
+reportReturnType = "error"

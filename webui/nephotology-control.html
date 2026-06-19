@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<title>Nephotology · Control</title>
+<style>
+  /* ----------------------------------------------------------------
+     Dim, low-glare palette to match the installation's aesthetic.
+     Nothing here is pure white; accents stay muted.
+  ---------------------------------------------------------------- */
+  :root{
+    --bg:        #07080a;
+    --bg-2:      #0c0e12;
+    --panel:     #101319;
+    --panel-2:   #141821;
+    --line:      #1d2330;
+    --line-2:    #2a3140;
+    --ink:       #c2c9d4;   /* primary text, softened */
+    --ink-dim:   #828c9c;   /* secondary text */
+    --ink-faint: #5a6373;   /* tertiary / hints */
+    --accent:    #5fb3a3;   /* muted teal */
+    --accent-dim:#2f5f57;
+    --accent-ink:#0a0f0e;
+    --warm:      #d8975a;   /* polluted / warning */
+    --bad:       #c8585a;
+    --good:      #4f93b8;   /* clean air */
+    --radius: 14px;
+    --radius-sm: 9px;
+    --shadow: 0 10px 30px rgba(0,0,0,.45);
+    --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:
+      radial-gradient(1200px 700px at 80% -10%, #0e1620 0%, transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, #12100f 0%, transparent 55%),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 0 64px;
+  }
+  a{ color: var(--accent); }
+
+  /* ---------- top bar ---------- */
+  header{
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(8,9,12,.92), rgba(8,9,12,.72));
+    border-bottom: 1px solid var(--line);
+  }
+  .bar{
+    max-width: 1080px; margin: 0 auto; padding: 12px 18px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:11px; margin-right:auto; }
+  .logo{
+    width: 30px; height: 30px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #6fd0bd, #2f5f57 55%, #0a1413 100%);
+    box-shadow: 0 0 18px rgba(95,179,163,.35), inset 0 0 6px rgba(0,0,0,.5);
+    flex: none;
+  }
+  .brand h1{ font-size: 16px; font-weight: 600; margin:0; letter-spacing:.3px; }
+  .brand .sub{ font-size: 11.5px; color: var(--ink-faint); letter-spacing:.4px; }
+
+  .status-pill{
+    display:flex; align-items:center; gap:8px;
+    font-size: 12.5px; color: var(--ink-dim);
+    padding: 5px 11px; border:1px solid var(--line); border-radius: 999px;
+    background: var(--panel);
+  }
+  .dot{ width:9px; height:9px; border-radius:50%; background: var(--ink-faint);
+        box-shadow: 0 0 0 0 rgba(0,0,0,0); transition: background .2s, box-shadow .2s; }
+  .dot.on{ background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .dot.busy{ background: var(--warm); box-shadow: 0 0 10px var(--warm); }
+  .dot.err{ background: var(--bad); box-shadow: 0 0 10px var(--bad); }
+
+  button{
+    font-family: inherit; font-size: 13.5px; color: var(--ink);
+    background: var(--panel-2); border: 1px solid var(--line-2);
+    border-radius: var(--radius-sm); padding: 8px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s, color .15s, transform .05s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:hover{ border-color: var(--accent-dim); }
+  button:active{ transform: translateY(1px); }
+  button:disabled{ opacity:.4; cursor: not-allowed; }
+  button:focus-visible, input:focus-visible, select:focus-visible{
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+  .btn-primary{
+    background: linear-gradient(180deg, #3a7a6f, #2c5d54);
+    border-color:#3f7c72; color:#eafdf8; font-weight:600;
+  }
+  .btn-primary:hover{ border-color:#5fb3a3; }
+
+  /* ---------- layout ---------- */
+  main{ max-width: 1080px; margin: 0 auto; padding: 18px; display: grid; gap: 18px; }
+  .panel{
+    background: linear-gradient(180deg, var(--panel), var(--bg-2));
+    border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 18px;
+  }
+  .panel > h2{
+    margin: 0 0 14px; font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.4px; color: var(--ink-faint);
+    display:flex; align-items:center; gap:8px;
+  }
+  .panel > h2 .hint{ font-weight:500; text-transform:none; letter-spacing:0;
+                     color: var(--ink-faint); font-size:11.5px; margin-left:auto; }
+  .grid-2{ display:grid; gap:18px; grid-template-columns: 1fr; }
+  @media (min-width: 760px){ .grid-2{ grid-template-columns: 1fr 1fr; } }
+
+  .disabled-overlay{ position: relative; }
+  body:not(.connected) .gate{ opacity:.45; pointer-events:none; filter: grayscale(.4); }
+
+  /* ---------- power + live ---------- */
+  .power-row{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .toggle{
+    --w: 62px; --h: 32px;
+    appearance:none; width:var(--w); height:var(--h); border-radius:999px;
+    background: var(--panel-2); border:1px solid var(--line-2); position:relative;
+    cursor:pointer; transition: background .2s, border-color .2s; flex:none;
+  }
+  .toggle::after{
+    content:""; position:absolute; top:3px; left:3px; width:24px; height:24px;
+    border-radius:50%; background:#6b7585; transition: transform .2s, background .2s;
+  }
+  .toggle:checked{ background: var(--accent-dim); border-color: var(--accent); }
+  .toggle:checked::after{ transform: translateX(30px); background: var(--accent); }
+  .power-state{ font-size:18px; font-weight:600; }
+  .power-state.off{ color: var(--ink-faint); }
+
+  /* PM gauge */
+  .pm-wrap{ margin-top: 4px; }
+  .pm-top{ display:flex; align-items:baseline; gap:10px; }
+  .pm-val{ font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing:.5px; }
+  .pm-unit{ color: var(--ink-faint); font-size: 13px; }
+  .pm-tag{ margin-left:auto; font-size:12px; padding:3px 10px; border-radius:999px;
+           border:1px solid var(--line-2); color: var(--ink-dim); }
+  .pm-track{
+    height: 10px; border-radius: 999px; margin-top: 12px; position: relative;
+    background: linear-gradient(90deg, var(--good), #6f9e8e 35%, var(--warm) 72%, var(--bad));
+    opacity:.85;
+  }
+  .pm-marker{
+    position:absolute; top:-4px; width:4px; height:18px; border-radius:3px;
+    background:#e7edf4; box-shadow:0 0 8px rgba(0,0,0,.6); transform: translateX(-2px);
+    transition: left .4s ease;
+  }
+  .pm-scale-lbl{ display:flex; justify-content:space-between; margin-top:6px;
+                 font-size:11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- modes ---------- */
+  .mode-grid{ display:grid; gap:10px; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); }
+  .mode{
+    text-align:left; padding:11px 12px; border-radius:11px; line-height:1.3;
+    background: var(--panel-2); border:1px solid var(--line); color: var(--ink);
+    display:flex; flex-direction:column; gap:3px; min-height: 78px;
+  }
+  .mode .num{ font: 600 11px/1 var(--mono); color: var(--ink-faint); letter-spacing:.5px; }
+  .mode .nm{ font-weight:600; font-size:13.5px; }
+  .mode .ds{ font-size:11.5px; color: var(--ink-dim); }
+  .mode:hover{ border-color: var(--accent-dim); }
+  .mode.active{
+    border-color: var(--accent);
+    background: linear-gradient(180deg, #15302b, #0e1c19);
+    box-shadow: inset 0 0 0 1px rgba(95,179,163,.25), 0 0 18px rgba(95,179,163,.10);
+  }
+  .mode.active .num{ color: var(--accent); }
+
+  /* ---------- sliders ---------- */
+  .ctl{ margin: 0 0 18px; }
+  .ctl:last-child{ margin-bottom: 4px; }
+  .ctl .lab{ display:flex; align-items:baseline; gap:8px; margin-bottom:8px; }
+  .ctl .lab .name{ font-weight:600; font-size:14px; }
+  .ctl .lab .desc{ font-size:11.5px; color: var(--ink-faint); }
+  .ctl .lab output{ margin-left:auto; font: 600 14px/1 var(--mono); color: var(--accent);
+                    font-variant-numeric: tabular-nums; }
+  input[type=range]{
+    -webkit-appearance:none; appearance:none; width:100%; height: 6px; border-radius:999px;
+    background: var(--line-2); outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, #8fd9c9, #3a7a6f);
+    border: 2px solid #0a0f0e; box-shadow: 0 0 10px rgba(95,179,163,.4); cursor:pointer;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:18px; height:18px; border-radius:50%; border:2px solid #0a0f0e;
+    background: radial-gradient(circle at 35% 35%, #8fd9c9, #3a7a6f); cursor:pointer;
+  }
+
+  /* segmented control */
+  .seg{ display:inline-flex; background: var(--bg-2); border:1px solid var(--line-2);
+        border-radius:10px; padding:3px; gap:3px; }
+  .seg button{ background:transparent; border:none; padding:7px 16px; border-radius:7px;
+               color: var(--ink-dim); font-weight:600; }
+  .seg button.on{ background: var(--accent-dim); color:#eafdf8; }
+
+  .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:11.5px; color: var(--ink-faint); text-transform:uppercase; letter-spacing:.6px; }
+  select, input[type=number], input[type=text]{
+    font-family: inherit; font-size:14px; color: var(--ink);
+    background: var(--bg-2); border:1px solid var(--line-2); border-radius:8px;
+    padding: 9px 11px;
+  }
+  input[type=number]{ width: 108px; }
+
+  /* console */
+  .console{
+    font: 12.5px/1.55 var(--mono); background:#06070a; border:1px solid var(--line);
+    border-radius:10px; padding:12px 14px; height: 240px; overflow:auto;
+    white-space: pre-wrap; word-break: break-word; color:#aeb8c6;
+  }
+  .console .out{ color: var(--accent); }
+  .console .in{ color: var(--ink-dim); }
+  .console .sys{ color: var(--ink-faint); font-style: italic; }
+  .console .err{ color: var(--bad); }
+  .cmdline{ display:flex; gap:10px; margin-top:12px; }
+  .cmdline input{ flex:1; font-family: var(--mono); }
+
+  .note{ font-size:12.5px; color: var(--ink-faint); margin: 0; }
+  .banner{
+    border:1px solid var(--line-2); background: var(--panel-2); color: var(--ink-dim);
+    border-radius:10px; padding:12px 14px; font-size:13px; margin: 0 0 18px;
+  }
+  .banner.warn{ border-color:#5a4326; background:#181208; color:#d8b07a; }
+  .banner.bad{ border-color:#5a2a2c; background:#160a0b; color:#e0908f; }
+  kbd{ font: 11.5px var(--mono); background: var(--bg); border:1px solid var(--line-2);
+       border-radius:5px; padding:1px 6px; color: var(--ink-dim); }
+  footer{ max-width:1080px; margin: 24px auto 0; padding: 0 18px; color: var(--ink-faint); font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Nephotology</h1>
+        <div class="sub">air-quality light · BLE control</div>
+      </div>
+    </div>
+    <div class="status-pill"><span id="dot" class="dot"></span><span id="statusText">Disconnected</span></div>
+    <button id="connectBtn" class="btn-primary">Connect</button>
+    <button id="disconnectBtn" disabled>Disconnect</button>
+  </div>
+</header>
+
+<main>
+  <div id="supportBanner"></div>
+
+  <!-- POWER + LIVE -->
+  <section class="panel">
+    <h2>System <span class="hint" id="statusSummary"></span></h2>
+    <div class="grid-2">
+      <div class="gate">
+        <div class="power-row">
+          <input type="checkbox" id="powerToggle" class="toggle" role="switch" aria-label="Power" />
+          <span id="powerState" class="power-state off">OFF</span>
+          <button id="refreshBtn" style="margin-left:auto">↻ Sync from device</button>
+        </div>
+      </div>
+      <div class="gate pm-wrap">
+        <div class="pm-top">
+          <span class="pm-val" id="pmVal">—</span>
+          <span class="pm-unit">µg/m³ PM2.5</span>
+          <span class="pm-tag" id="pmTag">no reading</span>
+        </div>
+        <div class="pm-track"><div class="pm-marker" id="pmMarker" style="left:0%"></div></div>
+        <div class="pm-scale-lbl"><span id="pmMinLbl">0</span><span id="pmMaxLbl">3500</span></div>
+        <label class="note" style="display:flex;gap:8px;align-items:center;margin-top:10px">
+          <input type="checkbox" id="autoRefresh" /> Auto-refresh reading every 3 s
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODES -->
+  <section class="panel gate">
+    <h2>Mode <span class="hint" id="modeHint">select a scene</span></h2>
+    <div class="mode-grid" id="modeGrid"></div>
+  </section>
+
+  <!-- FREQUENCY SCOPE WAVEFORM (mode 18) -->
+  <section class="panel gate">
+    <h2>Frequency Scope waveform <span class="hint">applies to mode 18 — picking one switches to it</span></h2>
+    <div class="seg" id="waveSeg" role="group" aria-label="Scope waveform" style="flex-wrap:wrap">
+      <button data-wave="SINE" class="on">Sine</button>
+      <button data-wave="SQUARE">Square</button>
+      <button data-wave="TRIANGLE">Triangle</button>
+      <button data-wave="SAW">Saw</button>
+      <button data-wave="PULSE">Pulse</button>
+      <button data-wave="NOISE">Noise</button>
+    </div>
+  </section>
+
+  <div class="grid-2">
+    <!-- LIGHT -->
+    <section class="panel gate">
+      <h2>Light</h2>
+      <div class="ctl">
+        <div class="lab"><span class="name">Brightness</span><span class="desc">1–255</span><output id="brightOut">—</output></div>
+        <input type="range" id="bright" min="1" max="255" step="1" value="128" />
+      </div>
+      <div class="ctl">
+        <div class="lab"><span class="name">Frame rate</span><span class="desc">1–240 fps</span><output id="fpsOut">—</output></div>
+        <input type="range" id="fps" min="1" max="240" step="1" value="60" />
+        <p class="note" id="delayNote" style="margin-top:8px"></p>
+      </div>
+    </section>
+
+    <!-- SENSOR -->
+    <section class="panel gate">
+      <h2>Sensor mapping <span class="hint">how PM2.5 drives the light</span></h2>
+      <div class="ctl">
+        <div class="lab"><span class="name">Smoothing</span><span class="desc">EMA α · 0=slow 1=instant</span><output id="alphaOut">—</output></div>
+        <input type="range" id="alpha" min="0" max="1" step="0.01" value="0.25" />
+      </div>
+      <div class="ctl">
+        <div class="lab"><span class="name">Scale</span><span class="desc">PM2.5 max · 100–9999</span><output id="scaleOut">—</output></div>
+        <input type="range" id="scale" min="100" max="9999" step="50" value="3500" />
+      </div>
+      <div class="ctl">
+        <div class="lab"><span class="name">PM min</span><span class="desc">baseline floor</span><output id="pmminOut">—</output></div>
+        <input type="range" id="pmmin" min="0" max="9998" step="10" value="0" />
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="field">
+          <label>Source</label>
+          <div class="seg" id="sensorSeg" role="group" aria-label="Sensor source">
+            <button data-sensor="WIRED" class="on">Wired</button>
+            <button data-sensor="ESPNOW">Wireless</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- LOCATOR -->
+  <section class="panel gate">
+    <h2>Locator <span class="hint">light the first N LEDs of a segment to find/orient a fixture</span></h2>
+    <div class="row">
+      <div class="field">
+        <label for="locSeg">Segment</label>
+        <select id="locSeg">
+          <option value="ALL">All</option>
+          <option value="STRIP">Strip (300)</option>
+          <option value="MATRIX">Matrix (320)</option>
+          <option value="DISC">Disc (241)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="locCount">Count</label>
+        <input type="number" id="locCount" min="0" max="1000" value="24" />
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <div class="row">
+          <button id="locGo" class="btn-primary">Locate</button>
+          <button id="locOff">Off</button>
+        </div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:10px">Locator runs as its own mode — picking any scene above turns it off.</p>
+  </section>
+
+  <!-- CONSOLE -->
+  <section class="panel">
+    <h2>Console <span class="hint">raw text commands — the device's native interface</span></h2>
+    <div class="row" style="margin-bottom:12px">
+      <button id="statusCmd">STATUS</button>
+      <button id="helpCmd">HELP</button>
+      <button id="clearLog">Clear log</button>
+    </div>
+    <div class="console" id="log" role="log" aria-live="polite" aria-label="Device log"></div>
+    <div class="cmdline">
+      <input type="text" id="cmdInput" placeholder="Type a command (e.g. MODE 14)  —  Enter to send" autocomplete="off" spellcheck="false" />
+      <button id="cmdSend">Send</button>
+    </div>
+    <p class="note" style="margin-top:10px">Commands are case-insensitive. Try <kbd>HELP</kbd> on the device for the full reference.</p>
+  </section>
+</main>
+
+<footer>
+  Web Bluetooth front-end for the Nephotology firmware. Pairs with the device named <strong>Nephotology</strong>.
+  Requires Chrome or Edge (desktop / Android). Safari and iOS don't support Web Bluetooth.
+</footer>
+
+<script>
+"use strict";
+/* ====================================================================
+   Nephotology BLE control — Web Bluetooth front-end.
+
+   The device exposes a GATT service with a write characteristic (text
+   commands) and a notify characteristic (text responses). This page sends
+   the exact strings the firmware's handleCommand() parses, and reads the
+   STATUS reply back to keep the controls in sync with the device.
+==================================================================== */
+
+const SERVICE_UUID = "19b10000-e8f2-537e-4f6c-d104768a1214";
+const CMD_UUID     = "19b10001-e8f2-537e-4f6c-d104768a1214";
+const RESP_UUID    = "19b10002-e8f2-537e-4f6c-d104768a1214";
+
+// Mode 0..30 (mode 31 is the Locator, handled in its own panel).
+const MODES = [
+  ["Arc",                 "A single radiant arc; PM bends and reddens it"],
+  ["Comet",               "A comet streaks the strip with a glowing tail"],
+  ["Chrono Rift",         "A tear in time; past and future bleed through"],
+  ["Chiaroscuro Pulse",   "Light against shadow, pulsing in high contrast"],
+  ["Starfield",           "Twinkling stars; density tracks the air"],
+  ["Anechoic",            "Invisible shapes drift — seen by the dark they cut"],
+  ["Subduction",          "Tectonic stress builds, then snaps in a warm ring"],
+  ["Clouds",              "Soft Perlin clouds breathing overhead"],
+  ["Dark Nebula",         "Slow drifting interstellar dust"],
+  ["Stigmergy",           "An ant colony lays and reinforces pheromone trails"],
+  ["Nocturne Mirage",     "A dim, dreamlike heat-shimmer"],
+  ["Gaze",                "An eye that fixates, twitches, turns inward; PM is mood"],
+  ["Mycelial Network",    "Action potentials branch across a living web"],
+  ["Convection Currents", "Heat rises and rolls in convection cells"],
+  ["Black Hole",          "An accretion disk swirls around a dark core"],
+  ["People",              "A crowd of wandering souls"],
+  ["Cellular Infection",  "Infection spreads cell to cell as PM climbs"],
+  ["Ultrasonic",          "40 kHz phased array — levitation nodes & beam steering; PM is drive"],
+  ["Frequency Scope",     "An oscilloscope — pick the waveform below"],
+  ["Quantum Entanglement","Paired particles flash in correlated sync"],
+  ["Pulsar",              "A spinning neutron star sweeps its beam"],
+  ["Quantum Cascade",     "Cascading energy-level transitions"],
+  ["Quantum Lattice",     "A shimmering lattice of probability cells"],
+  ["Electromagnetism",    "A pulse bounces; lightning fires; the poles glow"],
+  ["Synaptic Cascade",    "Neurons fire in spreading refractory waves"],
+  ["Crystal Cascade",     "Rush, peak, crash, valley — PM drives it harder"],
+  ["Nikola Tesla",        "Discharges crackle; every 9th saturates the rig"],
+  ["Morphogenesis",       "Live reaction-diffusion; PM walks spots → maze → chaos"],
+  ["Lichtenberg",         "Live dielectric breakdown; fractal lightning; PM is stress"],
+  ["Reverie",             "A mind thinking — a self-portrait; PM is cognitive load"],
+  ["Ephemeris",           "A forgetting front sweeps through; kept lights survive"],
+];
+const MODE_LOCATOR = 31;
+const SCOPE_MODE = 18;  // Frequency Scope — the one mode with a waveform sub-setting
+const SCOPE_WAVES = ["SINE", "SQUARE", "TRIANGLE", "SAW", "PULSE", "NOISE"];
+
+// ---- element refs ----
+const $ = id => document.getElementById(id);
+const el = {
+  dot: $("dot"), statusText: $("statusText"), statusSummary: $("statusSummary"),
+  connectBtn: $("connectBtn"), disconnectBtn: $("disconnectBtn"), refreshBtn: $("refreshBtn"),
+  supportBanner: $("supportBanner"),
+  powerToggle: $("powerToggle"), powerState: $("powerState"),
+  pmVal: $("pmVal"), pmTag: $("pmTag"), pmMarker: $("pmMarker"),
+  pmMinLbl: $("pmMinLbl"), pmMaxLbl: $("pmMaxLbl"), autoRefresh: $("autoRefresh"),
+  modeGrid: $("modeGrid"), modeHint: $("modeHint"), waveSeg: $("waveSeg"),
+  bright: $("bright"), brightOut: $("brightOut"),
+  fps: $("fps"), fpsOut: $("fpsOut"), delayNote: $("delayNote"),
+  alpha: $("alpha"), alphaOut: $("alphaOut"),
+  scale: $("scale"), scaleOut: $("scaleOut"),
+  pmmin: $("pmmin"), pmminOut: $("pmminOut"),
+  sensorSeg: $("sensorSeg"),
+  locSeg: $("locSeg"), locCount: $("locCount"), locGo: $("locGo"), locOff: $("locOff"),
+  log: $("log"), cmdInput: $("cmdInput"), cmdSend: $("cmdSend"),
+  statusCmd: $("statusCmd"), helpCmd: $("helpCmd"), clearLog: $("clearLog"),
+};
+
+// ---- BLE state ----
+let device = null, server = null, cmdChar = null, respChar = null;
+let connected = false;
+let currentMode = -1;
+let rxBuffer = "";
+let autoTimer = null;
+let lastPmMin = 0, lastPmMax = 3500;
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
+
+// ---- logging ----
+function logLine(text, cls){
+  const div = document.createElement("div");
+  if (cls) div.className = cls;
+  div.textContent = text;
+  el.log.appendChild(div);
+  el.log.scrollTop = el.log.scrollHeight;
+  // keep the log bounded
+  while (el.log.childNodes.length > 600) el.log.removeChild(el.log.firstChild);
+}
+
+// ---- write queue: BLE rejects overlapping GATT writes, so serialize them ----
+let writeChain = Promise.resolve();
+function send(cmd){
+  cmd = String(cmd).trim();
+  if (!cmd) return Promise.resolve();
+  if (!connected || !cmdChar){ logLine("⚠ not connected — " + cmd, "err"); return Promise.resolve(); }
+  logLine("» " + cmd, "out");
+  writeChain = writeChain.then(async () => {
+    const data = encoder.encode(cmd);
+    try {
+      await cmdChar.writeValueWithoutResponse(data);
+    } catch (e){
+      // fall back to a confirmed write if the without-response path is unavailable
+      try { await cmdChar.writeValueWithResponse(data); }
+      catch (e2){ logLine("✗ write failed: " + (e2.message || e2), "err"); }
+    }
+  });
+  return writeChain;
+}
+
+// Throttle slider traffic: send the latest value at most every `ms`,
+// always delivering the final value (trailing edge).
+function throttle(ms, fn){
+  let last = 0, pending = null, timer = null;
+  const fire = v => { last = Date.now(); fn(v); };
+  return v => {
+    pending = v;
+    const now = Date.now();
+    if (now - last >= ms){ fire(pending); pending = null; }
+    else if (!timer){
+      timer = setTimeout(() => {
+        timer = null;
+        if (pending !== null){ fire(pending); pending = null; }
+      }, ms - (now - last));
+    }
+  };
+}
+
+// ====================================================================
+//  Connection
+// ====================================================================
+// Truly disable every interactive control inside a .gate when offline, so
+// keyboard / assistive-tech users are gated too (pointer-events:none in CSS
+// only blocks mouse/touch).
+function setGateEnabled(enabled){
+  document.querySelectorAll(".gate").forEach(g =>
+    g.querySelectorAll("input, button, select").forEach(c => { c.disabled = !enabled; }));
+}
+
+function setConnState(state){ // 'on' | 'off' | 'busy' | 'err'
+  el.dot.className = "dot" + (state === "off" ? "" : " " + state);
+  const labels = { on:"Connected", off:"Disconnected", busy:"Connecting…", err:"Error" };
+  el.statusText.textContent = labels[state] || state;
+  connected = state === "on";
+  document.body.classList.toggle("connected", connected);
+  el.connectBtn.disabled = connected || state === "busy";
+  el.disconnectBtn.disabled = !connected;
+  setGateEnabled(connected);
+  if (!connected) stopAuto();
+}
+
+async function connect(){
+  if (!navigator.bluetooth){ logLine("✗ Web Bluetooth not available in this browser.", "err"); return; }
+  try {
+    setConnState("busy");
+    rxBuffer = "";                 // start each session with a clean line buffer
+    logLine("Requesting device…", "sys");
+    device = await navigator.bluetooth.requestDevice({
+      filters: [{ services: [SERVICE_UUID] }, { namePrefix: "Nephotology" }],
+      optionalServices: [SERVICE_UUID],
+    });
+    device.addEventListener("gattserverdisconnected", onDisconnected);
+    logLine("Connecting to " + (device.name || "device") + "…", "sys");
+    server  = await device.gatt.connect();
+    const svc = await server.getPrimaryService(SERVICE_UUID);
+    cmdChar  = await svc.getCharacteristic(CMD_UUID);
+    respChar = await svc.getCharacteristic(RESP_UUID);
+    await respChar.startNotifications();
+    respChar.addEventListener("characteristicvaluechanged", onNotify);
+    setConnState("on");
+    if (el.autoRefresh.checked) startAuto();   // resume polling if it was left on
+    logLine("Connected. Subscribing & syncing…", "sys");
+    // Give the firmware a beat, then pull current state into the UI.
+    setTimeout(() => send("STATUS"), 250);
+  } catch (e){
+    if (e && e.name === "NotFoundError"){ logLine("Pairing cancelled.", "sys"); setConnState("off"); }
+    else { logLine("✗ " + (e.message || e), "err"); setConnState("err"); }
+  }
+}
+
+function disconnect(){
+  stopAuto();
+  if (device && device.gatt && device.gatt.connected) device.gatt.disconnect();
+  else onDisconnected();
+}
+
+function onDisconnected(){
+  cmdChar = respChar = server = null;
+  rxBuffer = "";                   // drop any partial line so it can't bleed into the next session
+  setConnState("off");
+  el.statusSummary.textContent = "";
+  logLine("Disconnected.", "sys");
+}
+
+// ====================================================================
+//  Incoming notifications -> reassemble lines -> parse STATUS
+// ====================================================================
+function onNotify(ev){
+  rxBuffer += decoder.decode(ev.target.value);
+  let nl;
+  while ((nl = rxBuffer.indexOf("\n")) >= 0){
+    const line = rxBuffer.slice(0, nl);
+    rxBuffer = rxBuffer.slice(nl + 1);
+    handleLine(line);
+  }
+}
+
+function handleLine(line){
+  if (line.length === 0) return;
+  // echo of our own command (firmware replies "> CMD") — show but don't parse
+  logLine(line, line.startsWith(">") ? "in" : null);
+  parseStatus(line);
+}
+
+// STATUS replies look like:  "Power:      ON" / "Mode:       14" / "PM2.5:   12.3"
+function parseStatus(line){
+  let m;
+  if ((m = line.match(/^Power:\s+(ON|OFF)/i)))          setPowerUI(m[1].toUpperCase() === "ON");
+  else if ((m = line.match(/^Mode:\s+(\d+)/i)))         setModeUI(parseInt(m[1], 10));
+  else if ((m = line.match(/^Brightness:\s+(\d+)/i)))   setSlider(el.bright, el.brightOut, +m[1], v=>v);
+  else if ((m = line.match(/^Alpha:\s+([\d.]+)/i)))     setSlider(el.alpha, el.alphaOut, +m[1], v=>v.toFixed(2));
+  else if ((m = line.match(/^Scale:\s+([\d.]+)/i)))   { setSlider(el.scale, el.scaleOut, Math.round(+m[1]), v=>v); lastPmMax = Math.round(+m[1]); refreshPmScale(); }
+  else if ((m = line.match(/^PM min:\s+([\d.]+)/i)))  { setSlider(el.pmmin, el.pmminOut, Math.round(+m[1]), v=>v); lastPmMin = Math.round(+m[1]); refreshPmScale(); }
+  else if ((m = line.match(/^Delay:\s+(\d+)/i)))        setFpsFromDelay(+m[1]);
+  else if ((m = line.match(/^Sensor:\s+(\w+)/i)))       setSensorUI(m[1].toUpperCase());
+  else if ((m = line.match(/^Scope wave:\s+(\w+)/i)))   setWaveUI(m[1].toUpperCase());
+  else if ((m = line.match(/^PM2\.5:\s+([\d.]+)/i)))    setPmReading(parseFloat(m[1]));
+}
+
+// ====================================================================
+//  UI <-> state helpers (these set controls WITHOUT re-sending to device)
+// ====================================================================
+function setSlider(input, out, value, fmt){
+  if (Number.isNaN(value)) return;
+  input.value = value;
+  out.textContent = fmt ? fmt(parseFloat(value)) : value;
+}
+function setPowerUI(on){
+  el.powerToggle.checked = on;
+  el.powerState.textContent = on ? "ON" : "OFF";
+  el.powerState.classList.toggle("off", !on);
+  updateSummary();
+}
+function setModeUI(n){
+  currentMode = n;
+  const cards = el.modeGrid.children;
+  for (let i = 0; i < cards.length; i++) cards[i].classList.toggle("active", i === n);
+  el.modeHint.textContent = n === MODE_LOCATOR ? "Locator active"
+                          : (MODES[n] ? MODES[n][0] : "mode " + n);
+  updateSummary();
+}
+function setWaveUI(name){
+  for (const b of el.waveSeg.children) b.classList.toggle("on", b.dataset.wave === name);
+}
+function setSensorUI(src){
+  for (const b of el.sensorSeg.children) b.classList.toggle("on", b.dataset.sensor === src);
+}
+function setFpsFromDelay(delayMs){
+  el.delayNote.textContent = "frame delay ≈ " + delayMs + " ms";
+  // The firmware only stores an integer ms delay (floor(1000/fps)), so a
+  // readback can't recover the exact fps the user picked. If the slider's
+  // current value already maps to this delay, keep it — otherwise the slider
+  // would visibly drift on every STATUS sync (e.g. 60 → delay 16 → 63).
+  const curFps = parseInt(el.fps.value, 10);
+  if (curFps > 0 && Math.floor(1000 / curFps) === delayMs) return;
+  const fps = delayMs > 0 ? Math.round(1000 / delayMs) : 240;
+  el.fps.value = Math.min(240, Math.max(1, fps));
+  el.fpsOut.textContent = el.fps.value;
+}
+function refreshPmScale(){
+  el.pmMinLbl.textContent = lastPmMin;
+  el.pmMaxLbl.textContent = lastPmMax;
+  el.pmmin.max = Math.max(0, lastPmMax - 1);
+}
+function setPmReading(pm){
+  el.pmVal.textContent = pm.toFixed(1);
+  const span = Math.max(1, lastPmMax - lastPmMin);
+  const ratio = Math.min(1, Math.max(0, (pm - lastPmMin) / span));
+  el.pmMarker.style.left = (ratio * 100) + "%";
+  let tag = "good", txt = "clean";
+  if (pm > 150){ tag = "bad"; txt = "hazardous"; }
+  else if (pm > 55){ tag = "warm"; txt = "unhealthy"; }
+  else if (pm > 35){ tag = "warm"; txt = "moderate"; }
+  el.pmTag.textContent = txt;
+  el.pmTag.style.color = tag === "bad" ? "var(--bad)" : tag === "warm" ? "var(--warm)" : "var(--good)";
+}
+function updateSummary(){
+  const modeName = currentMode === MODE_LOCATOR ? "Locator"
+                 : (MODES[currentMode] ? MODES[currentMode][0] : "—");
+  el.statusSummary.textContent = connected
+    ? (el.powerToggle.checked ? "On · " + modeName : "Standby")
+    : "";
+}
+
+// ====================================================================
+//  Build mode grid
+// ====================================================================
+MODES.forEach(([name, desc], i) => {
+  const b = document.createElement("button");
+  b.className = "mode";
+  b.innerHTML = `<span class="num">${String(i).padStart(2,"0")}</span>`
+              + `<span class="nm"></span><span class="ds"></span>`;
+  b.querySelector(".nm").textContent = name;
+  b.querySelector(".ds").textContent = desc;
+  b.addEventListener("click", () => {
+    setModeUI(i);
+    if (i === SCOPE_MODE) setWaveUI("SINE");  // a bare "MODE 18" resets the device to sine
+    send("MODE " + i);
+  });
+  el.modeGrid.appendChild(b);
+});
+
+// Frequency-scope waveform — selecting one switches the device to mode 18
+// with that wave (the firmware only sets the wave via the mode command).
+for (const b of el.waveSeg.children){
+  b.addEventListener("click", () => {
+    setWaveUI(b.dataset.wave);
+    setModeUI(SCOPE_MODE);
+    send("MODE " + SCOPE_MODE + " " + b.dataset.wave);
+  });
+}
+
+// ====================================================================
+//  Control wiring
+// ====================================================================
+el.connectBtn.addEventListener("click", connect);
+el.disconnectBtn.addEventListener("click", disconnect);
+el.refreshBtn.addEventListener("click", () => send("STATUS"));
+el.statusCmd.addEventListener("click", () => send("STATUS"));
+el.helpCmd.addEventListener("click", () => send("HELP"));
+el.clearLog.addEventListener("click", () => { el.log.innerHTML = ""; });
+
+el.powerToggle.addEventListener("change", () => {
+  const on = el.powerToggle.checked;
+  setPowerUI(on);
+  send(on ? "ON" : "OFF");
+});
+
+// sliders — live label + throttled send
+const sendBright = throttle(90, v => send("BRIGHTNESS " + v));
+el.bright.addEventListener("input", () => { el.brightOut.textContent = el.bright.value; sendBright(el.bright.value); });
+
+const sendFps = throttle(120, v => send("FPS " + v));
+el.fps.addEventListener("input", () => {
+  el.fpsOut.textContent = el.fps.value;
+  el.delayNote.textContent = "frame delay ≈ " + Math.round(1000 / el.fps.value) + " ms";
+  sendFps(el.fps.value);
+});
+
+const sendAlpha = throttle(120, v => send("ALPHA " + Number(v).toFixed(2)));
+el.alpha.addEventListener("input", () => { el.alphaOut.textContent = Number(el.alpha.value).toFixed(2); sendAlpha(el.alpha.value); });
+
+const sendScale = throttle(120, v => send("SCALE " + v));
+el.scale.addEventListener("input", () => {
+  el.scaleOut.textContent = el.scale.value;
+  lastPmMax = parseInt(el.scale.value, 10); refreshPmScale();
+  sendScale(el.scale.value);
+});
+
+const sendPmmin = throttle(120, v => send("PMMIN " + v));
+el.pmmin.addEventListener("input", () => {
+  el.pmminOut.textContent = el.pmmin.value;
+  lastPmMin = parseInt(el.pmmin.value, 10); refreshPmScale();
+  sendPmmin(el.pmmin.value);
+});
+
+for (const b of el.sensorSeg.children){
+  b.addEventListener("click", () => { setSensorUI(b.dataset.sensor); send("SENSOR " + b.dataset.sensor); });
+}
+
+el.locGo.addEventListener("click", () => {
+  const seg = el.locSeg.value;
+  const n = Math.max(0, parseInt(el.locCount.value || "0", 10));
+  send("FIND " + seg + " " + n);
+  setModeUI(MODE_LOCATOR);
+});
+el.locOff.addEventListener("click", () => { send("FIND OFF"); });
+
+function sendRaw(){
+  const v = el.cmdInput.value.trim();
+  if (!v) return;
+  send(v);
+  el.cmdInput.value = "";
+}
+el.cmdSend.addEventListener("click", sendRaw);
+el.cmdInput.addEventListener("keydown", e => { if (e.key === "Enter") sendRaw(); });
+
+// auto-refresh PM reading
+function startAuto(){ stopAuto(); autoTimer = setInterval(() => { if (connected) send("STATUS"); }, 3000); }
+function stopAuto(){ if (autoTimer){ clearInterval(autoTimer); autoTimer = null; } }
+el.autoRefresh.addEventListener("change", () => { el.autoRefresh.checked ? startAuto() : stopAuto(); });
+
+// ====================================================================
+//  Initial paint + browser-support check
+// ====================================================================
+(function init(){
+  // seed slider labels
+  el.brightOut.textContent = el.bright.value;
+  el.fpsOut.textContent = el.fps.value;
+  el.delayNote.textContent = "frame delay ≈ " + Math.round(1000 / el.fps.value) + " ms";
+  el.alphaOut.textContent = Number(el.alpha.value).toFixed(2);
+  el.scaleOut.textContent = el.scale.value;
+  el.pmminOut.textContent = el.pmmin.value;
+  refreshPmScale();
+  setConnState("off");
+
+  if (!navigator.bluetooth){
+    el.supportBanner.innerHTML =
+      '<div class="banner bad"><strong>Web Bluetooth isn\'t available here.</strong> ' +
+      'Open this page in <strong>Chrome</strong> or <strong>Edge</strong> on desktop or Android. ' +
+      'Safari, Firefox and iOS don\'t support it.</div>';
+    el.connectBtn.disabled = true;
+  } else if (!window.isSecureContext){
+    el.supportBanner.innerHTML =
+      '<div class="banner warn">This page isn\'t in a secure context, which Web Bluetooth requires. ' +
+      'Open it via <kbd>https://</kbd>, <kbd>localhost</kbd>, or directly as a <kbd>file://</kbd> path.</div>';
+  }
+})();
+</script>
+</body>
+</html>
